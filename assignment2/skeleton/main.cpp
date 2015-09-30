@@ -5,8 +5,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QFile  mfile(QString("/Users/mayue/test.skel"));
-    qDebug()<<mfile.isOpen();
+    QFile mfile(QString("/Users/mayue/test.skel"));
     SkelontonParser p(&mfile);
 
     MainWindow w;

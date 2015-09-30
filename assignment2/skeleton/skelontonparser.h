@@ -4,7 +4,7 @@
 #include <QMap>
 #include <QTextStream>
 #include <QFile>
-
+#include <QStack>
 
 enum ParseToken
 {
@@ -44,13 +44,18 @@ class SkelontonParser
 public:
     SkelontonParser(QFile *file);
     ~SkelontonParser();
+    Skelonton *skel;
 private:
     QFile* m_file;
     QString m_lexicon;
     QString m_currentLine;
     BallJoint* currJoint;
+
+    QStack<BallJoint*> stackParent;
     bool parse();
     ParseToken lexToken();
+    void parseBallJoint();
+    void parseEnd();
 };
 
 #endif // SKELONTONPARSER_H

@@ -20,12 +20,6 @@ public:
     QVector2D rotxlimit;
     QVector2D rotylimit;
     QVector2D rotzlimit;
-
-    std::vector<BallJoint*> children;
-    BallJoint* parent;
-
-    void addChild(BallJoint* child);
-
 };
 
 #endif // BALLJOINT_H

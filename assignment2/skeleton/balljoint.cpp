@@ -9,17 +9,9 @@ BallJoint::BallJoint()
     rotylimit = QVector2D(-100000, 100000);
     rotzlimit = QVector2D(-100000, 100000);
     pose = QVector3D(0.0f, 0.0f, 0.0f);
-    parent = NULL;
 }
 
 BallJoint::~BallJoint()
 {
 
 }
-
-void BallJoint::addChild(BallJoint* child)
-{
-    this->children.push_back(child);
-
-}
-
