@@ -7,10 +7,10 @@
 #include <QOpenGLVertexArrayObject>
 #include <QMatrix4x4>
 #include <QOpenGLWidget>
+#include <QTimer>
 #include "skelonton.h"
 #include "camera.h"
 #include "trackball.h"
-class QTimer;
 class QOpenGLShaderProgram;
 
 class view : public QOpenGLWidget,
@@ -47,12 +47,20 @@ private:
   int u_worldToCamera;
   int u_cameraToView;
 
-  //QTimer *m_timer;
+  QTimer *m_timer;
   TrackBall m_trackball;
   QMatrix4x4 m_projection;
   Camera m_camera;
   QMatrix4x4 m_transform;
 
+  int rotateX;
+  int rotateY;
+  int rotateZ;
+public slots:
+  void recFile(const QString &name);
+  void worldRotationX(int angle);
+  void worldRotationY(int angle);
+  void worldRotationZ(int angle);
 };
 
 #endif // VIEW_H

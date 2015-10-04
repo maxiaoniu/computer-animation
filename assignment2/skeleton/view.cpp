@@ -55,16 +55,12 @@ static const Vertex sg_vertexes[] = {
 
 view::view(QWidget *parent) : QOpenGLWidget(parent)
 {
-    //m_timer = new QTimer(this);
-    //m_timer->setInterval(30);
-    //connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
-    //m_timer->start();
-     //this->setFocusPolicy(Qt::StrongFocus);
+    m_timer = new QTimer(this);
+    m_timer->setInterval(30);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
+    m_timer->start();
+    this->setFocusPolicy(Qt::StrongFocus);
 
-    QFile mfile(QString("/Users/mayue/test.skel"));
-    SkelontonParser parser(&mfile);
-    skel = parser.skel;
-    qDebug()<<skel->tree.size();
     m_projection.setToIdentity();
     m_projection.perspective(45.0f, 1, 0.0f, 1000.0f);
     m_camera.setToIdentity();
@@ -80,7 +76,7 @@ void view::initializeGL()
   // Initialize OpenGL Backend
   initializeOpenGLFunctions();
   connect(context(), SIGNAL(aboutToBeDestroyed()), this, SLOT(teardownGL()), Qt::DirectConnection);
-  connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
+  //connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
 
   //glEnable(GL_CULL_FACE);
   glPolygonOffset(2.0f, 2.0f);
@@ -138,14 +134,19 @@ void view::paintGL()
   m_program->setUniformValue(u_worldToCamera,m_camera.getMatrix());
   m_program->setUniformValue(u_cameraToView, m_projection);
   //qDebug()<<m_camera.getMatrix();
+  if(skel)
   {
     m_object.bind();
     QHash<BallJoint*, BallJoint*>::const_iterator it = skel->tree.begin();
     while(it != skel->tree.constEnd()) {
         BallJoint* currJoint = it.key();
         currJoint->getLocalPos();
-        if(currJoint == skel->root)
+        if(currJoint == skel->root) {
             currJoint->localPos.rotate(m_trackball.rotation());
+            currJoint->localPos.rotate(rotateX,1,0,0);
+            currJoint->localPos.rotate(rotateY,0,1,0);
+            currJoint->localPos.rotate(rotateZ,0,0,1);
+        }
         ++it;
     }
     it = skel->tree.begin();
@@ -193,6 +194,37 @@ QPointF view::PosToViewPos(const QPoint& p)
                    1.0 - 2.0 * float(p.y()) / height());
 }
 
+void view::recFile(const QString &name)
+{
+    qDebug()<<"receive file";
+    QFile mfile(name);
+    SkelontonParser parser(&mfile);
+    //danger action,TODO fix
+    if(skel)
+        delete skel;
+    skel = parser.skel;
+    qDebug()<<skel->tree.size();
+    rotateX = 0;
+    rotateY = 0;
+    rotateZ = 0;
+    m_trackball.init();
+}
+
+void view::worldRotationX(int angle)
+{
+    rotateX = angle;
+}
+
+
+void view::worldRotationY(int angle)
+{
+    rotateY = angle;
+}
+
+void view::worldRotationZ(int angle)
+{
+    rotateZ = angle;
+}
 
 void view::mousePressEvent(QMouseEvent *event)
 {

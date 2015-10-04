@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     skelontonparser.cpp \
     view.cpp \
     camera.cpp \
-    trackball.cpp
+    trackball.cpp \
+    filereader.cpp
 
 HEADERS  += mainwindow.h \
     balljoint.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     view.h \
     vertex.h \
     camera.h \
-    trackball.h
+    trackball.h \
+    filereader.h
 
 FORMS    += mainwindow.ui
 

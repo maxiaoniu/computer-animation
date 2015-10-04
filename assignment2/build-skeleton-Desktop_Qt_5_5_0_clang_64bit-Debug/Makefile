@@ -55,9 +55,11 @@ SOURCES       = ../skeleton/main.cpp \
 		../skeleton/skelontonparser.cpp \
 		../skeleton/view.cpp \
 		../skeleton/camera.cpp \
-		../skeleton/trackball.cpp qrc_shader.cpp \
+		../skeleton/trackball.cpp \
+		../skeleton/filereader.cpp qrc_shader.cpp \
 		moc_mainwindow.cpp \
-		moc_view.cpp
+		moc_view.cpp \
+		moc_filereader.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		balljoint.o \
@@ -66,9 +68,11 @@ OBJECTS       = main.o \
 		view.o \
 		camera.o \
 		trackball.o \
+		filereader.o \
 		qrc_shader.o \
 		moc_mainwindow.o \
-		moc_view.o
+		moc_view.o \
+		moc_filereader.o
 DIST          = /Users/mayue/Qt5-5/5.5/clang_64/mkspecs/features/spec_pre.prf \
 		/Users/mayue/Qt5-5/5.5/clang_64/mkspecs/qdevice.pri \
 		/Users/mayue/Qt5-5/5.5/clang_64/mkspecs/features/device_config.prf \
@@ -214,14 +218,16 @@ DIST          = /Users/mayue/Qt5-5/5.5/clang_64/mkspecs/features/spec_pre.prf \
 		../skeleton/view.h \
 		../skeleton/vertex.h \
 		../skeleton/camera.h \
-		../skeleton/trackball.h ../skeleton/main.cpp \
+		../skeleton/trackball.h \
+		../skeleton/filereader.h ../skeleton/main.cpp \
 		../skeleton/mainwindow.cpp \
 		../skeleton/balljoint.cpp \
 		../skeleton/skelonton.cpp \
 		../skeleton/skelontonparser.cpp \
 		../skeleton/view.cpp \
 		../skeleton/camera.cpp \
-		../skeleton/trackball.cpp
+		../skeleton/trackball.cpp \
+		../skeleton/filereader.cpp
 QMAKE_TARGET  = skeleton
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = skeleton.app/Contents/MacOS/skeleton
@@ -580,8 +586,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../skeleton/shader.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../skeleton/mainwindow.h ../skeleton/balljoint.h ../skeleton/skelonton.h ../skeleton/skelontonparser.h ../skeleton/view.h ../skeleton/vertex.h ../skeleton/camera.h ../skeleton/trackball.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../skeleton/main.cpp ../skeleton/mainwindow.cpp ../skeleton/balljoint.cpp ../skeleton/skelonton.cpp ../skeleton/skelontonparser.cpp ../skeleton/view.cpp ../skeleton/camera.cpp ../skeleton/trackball.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../skeleton/mainwindow.h ../skeleton/balljoint.h ../skeleton/skelonton.h ../skeleton/skelontonparser.h ../skeleton/view.h ../skeleton/vertex.h ../skeleton/camera.h ../skeleton/trackball.h ../skeleton/filereader.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../skeleton/main.cpp ../skeleton/mainwindow.cpp ../skeleton/balljoint.cpp ../skeleton/skelonton.cpp ../skeleton/skelontonparser.cpp ../skeleton/view.cpp ../skeleton/camera.cpp ../skeleton/trackball.cpp ../skeleton/filereader.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../skeleton/mainwindow.ui $(DISTDIR)/
 
 
@@ -614,9 +620,9 @@ qrc_shader.cpp: ../skeleton/shader.qrc \
 		../skeleton/shader/simple.vert
 	/Users/mayue/Qt5-5/5.5/clang_64/bin/rcc -name shader ../skeleton/shader.qrc -o qrc_shader.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_view.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_view.cpp moc_filereader.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_view.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_view.cpp moc_filereader.cpp
 moc_mainwindow.cpp: /Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		../skeleton/mainwindow.h
@@ -657,6 +663,13 @@ moc_view.cpp: /Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/QOpenG
 		../skeleton/view.h
 	/Users/mayue/Qt5-5/5.5/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/mayue/Qt5-5/5.5/clang_64/mkspecs/macx-clang -I'/Users/mayue/QT/workspace/computer animation/assignment2/skeleton' -I/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers -I/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers -I/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers -I. -F/Users/mayue/Qt5-5/5.5/clang_64/lib ../skeleton/view.h -o moc_view.cpp
 
+moc_filereader.cpp: /Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		../skeleton/filereader.h
+	/Users/mayue/Qt5-5/5.5/clang_64/bin/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -I/Users/mayue/Qt5-5/5.5/clang_64/mkspecs/macx-clang -I'/Users/mayue/QT/workspace/computer animation/assignment2/skeleton' -I/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers -I/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers -I/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers -I. -F/Users/mayue/Qt5-5/5.5/clang_64/lib ../skeleton/filereader.h -o moc_filereader.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all: ui_mainwindow.h
@@ -664,6 +677,7 @@ compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h
 ui_mainwindow.h: ../skeleton/mainwindow.ui \
 		../skeleton/view.h \
+		../skeleton/filereader.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/QOpenGLWindow \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/qopenglwindow.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/QOpenGLFunctions \
@@ -695,7 +709,11 @@ ui_mainwindow.h: ../skeleton/mainwindow.ui \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/qquaternion.h \
 		../skeleton/trackball.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QPointF \
-		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qpoint.h
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h
 	/Users/mayue/Qt5-5/5.5/clang_64/bin/uic ../skeleton/mainwindow.ui -o ui_mainwindow.h
 
 compiler_rez_source_make_all:
@@ -891,6 +909,21 @@ trackball.o: ../skeleton/trackball.cpp ../skeleton/trackball.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qpoint.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o trackball.o ../skeleton/trackball.cpp
 
+filereader.o: ../skeleton/filereader.cpp ../skeleton/filereader.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QDebug \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/QFileDialog \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtWidgets.framework/Headers/qfiledialog.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QDir \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qdir.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o filereader.o ../skeleton/filereader.cpp
+
 qrc_shader.o: qrc_shader.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_shader.o qrc_shader.cpp
 
@@ -899,6 +932,9 @@ moc_mainwindow.o: moc_mainwindow.cpp
 
 moc_view.o: moc_view.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_view.o moc_view.cpp
+
+moc_filereader.o: moc_filereader.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_filereader.o moc_filereader.cpp
 
 ####### Install
 
