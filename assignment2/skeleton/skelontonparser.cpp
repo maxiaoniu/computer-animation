@@ -11,13 +11,11 @@ SkelontonParser::SkelontonParser(QFile *file)
     skel = new Skelonton();
     file->open(QFile::ReadOnly | QFile::Text);
     parse();
-
-
 }
 
 SkelontonParser::~SkelontonParser()
 {
-
+   // delete skel;
 }
 
 
@@ -37,16 +35,19 @@ bool SkelontonParser::parse()
     while(!in.atEnd()) {
         m_currentLine.clear();
         m_currentLine = in.readLine();
+
         //delete the empty char in the begin and end of current line
         m_currentLine = m_currentLine.trimmed();
+
         m_lexicon.clear();
 
         m_lexicon = m_currentLine.section(" ", 0, 0);
         QStringList strList = m_currentLine.split(' ',QString::SkipEmptyParts);
-        qDebug()<< m_lexicon;
+
         switch(lexToken())
         {
             case PT_BALLJOINT:
+                qDebug()<<m_currentLine;
                 parseBallJoint();
                 break;
             case PT_JOINT_END:
@@ -85,7 +86,7 @@ bool SkelontonParser::parse()
                                             strList[2].toFloat());
             break;
 
-            default:
+         default:
                 break;
         }
 

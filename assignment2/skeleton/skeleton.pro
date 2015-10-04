@@ -16,11 +16,21 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     balljoint.cpp \
     skelonton.cpp \
-    skelontonparser.cpp
+    skelontonparser.cpp \
+    view.cpp \
+    camera.cpp \
+    trackball.cpp
 
 HEADERS  += mainwindow.h \
     balljoint.h \
     skelonton.h \
-    skelontonparser.h
+    skelontonparser.h \
+    view.h \
+    vertex.h \
+    camera.h \
+    trackball.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    shader.qrc

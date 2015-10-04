@@ -8,6 +8,7 @@
 
 enum ParseToken
 {
+    PT_EMPTY,
     PT_BALLJOINT,
     PT_JOINT_START,
     PT_OFFSET,
