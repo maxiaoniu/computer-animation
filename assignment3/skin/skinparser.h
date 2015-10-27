@@ -1,9 +1,22 @@
 #ifndef SKINPARSER_H
 #define SKINPARSER_H
-#include "skin.h"
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
+#include <QOpenGLFunctions>
 #include <QMap>
 #include <QTextStream>
 #include <QFile>
+#include <QVector3D>
+#include <QVector>
+#include <QMatrix4x4>
+struct SkinedVertex
+{
+    QVector3D m_position;
+    QVector3D m_normal;
+
+    int m_jointIndex[4];
+    float m_jointWeight[4];
+};
 
 enum SkinParseToken
 {
@@ -37,15 +50,21 @@ class SkinParser
 public:
     SkinParser(QFile *file);
     ~SkinParser();
-    Skin *skin;
+    void initGL();
+    QVector<QMatrix4x4*> bindingsMatrix;
+    void draw();
 private:
     QFile* m_file;
     QString m_lexicon;
     QString m_currentLine;
-
+    QVector<SkinedVertex*> skinVertexs;
+    QVector<int> triangles;
     bool parse();
     SkinParseToken lexToken();
 
+    QOpenGLBuffer *m_vBuffer;
+    QOpenGLBuffer *m_eBuffer;
+    QOpenGLVertexArrayObject *m_vao;
 signals:
 
 public slots:

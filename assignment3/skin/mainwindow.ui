@@ -165,6 +165,100 @@
       </item>
      </layout>
     </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>190</y>
+       <width>171</width>
+       <height>26</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>175</width>
+       <height>94</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetFixedSize</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>X Axis:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinBox_2">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>-360</number>
+        </property>
+        <property name="maximum">
+         <number>360</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Y Axis:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Z Axis:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spinBox_6">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>-360</number>
+        </property>
+        <property name="maximum">
+         <number>360</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="spinBox_7">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>-360</number>
+        </property>
+        <property name="maximum">
+         <number>360</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
   </widget>
  </widget>
@@ -175,10 +269,15 @@
    <extends>QOpenGLWidget</extends>
    <header>view.h</header>
    <slots>
+    <signal>updateJointNameSignal(QStringList)</signal>
     <slot>recFile(QString)</slot>
     <slot>worldRotationX(int)</slot>
     <slot>worldRotationY(int)</slot>
     <slot>worldRotationZ(int)</slot>
+    <slot>jointSelect(int)</slot>
+    <slot>localRotationX(int)</slot>
+    <slot>localRotationY(int)</slot>
+    <slot>localRotationZ(int)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -254,6 +353,70 @@
     <hint type="destinationlabel">
      <x>204</x>
      <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>jointSelect(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>localRotationX(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_6</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>localRotationY(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_7</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>localRotationZ(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>301</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>207</x>
+     <y>303</y>
     </hint>
    </hints>
   </connection>

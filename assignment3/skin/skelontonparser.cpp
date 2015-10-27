@@ -7,6 +7,7 @@
 SkelontonParser::SkelontonParser(QFile *file)
 {
     m_file = file;
+    m_jointID = 0;
     currJoint = NULL;
     skel = new Skelonton();
     file->open(QFile::ReadOnly | QFile::Text);
@@ -96,7 +97,10 @@ bool SkelontonParser::parse()
 
 void SkelontonParser::parseBallJoint() {
     currJoint = new BallJoint();
+    currJoint->id = m_jointID;
+    m_jointID++;
     currJoint->name = m_currentLine.section(" ", 1, 1);
+    nameList.append(currJoint->name);
     if(stackParent.isEmpty()) {
         skel->root = currJoint;
         skel->tree[currJoint] = NULL;

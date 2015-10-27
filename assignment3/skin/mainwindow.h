@@ -15,6 +15,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
+private slots:
+    void on_openGLWidget_updateJointNameSignal(const QStringList list);
+
 private:
     Ui::MainWindow *ui;
 };

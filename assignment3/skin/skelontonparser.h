@@ -46,12 +46,13 @@ public:
     SkelontonParser(QFile *file);
     ~SkelontonParser();
     Skelonton *skel;
+    QStringList nameList;
 private:
     QFile* m_file;
     QString m_lexicon;
     QString m_currentLine;
     BallJoint* currJoint;
-
+    int m_jointID;
     QStack<BallJoint*> stackParent;
     bool parse();
     ParseToken lexToken();

@@ -11,6 +11,7 @@
 #include "skelonton.h"
 #include "camera.h"
 #include "trackball.h"
+#include "skinparser.h"
 class QOpenGLShaderProgram;
 
 class view : public QOpenGLWidget,
@@ -41,11 +42,14 @@ private:
   QOpenGLVertexArrayObject m_object1;
   QOpenGLShaderProgram *m_program;
   Skelonton *skel;
+  SkinParser *skinparser1;
 
   // Shader Information
   int u_modelToWorld;
   int u_worldToCamera;
   int u_cameraToView;
+  int u_jointMatrixs;
+  int u_jointBindMatrix;
 
   QTimer *m_timer;
   TrackBall m_trackball;
@@ -56,11 +60,23 @@ private:
   int rotateX;
   int rotateY;
   int rotateZ;
+  int currentJointID;
+  int jointRotateX;
+  int jointRotateY;
+  int jointRotateZ;
 public slots:
   void recFile(const QString &name);
   void worldRotationX(int angle);
   void worldRotationY(int angle);
   void worldRotationZ(int angle);
+
+  void jointSelect(int index);
+  void localRotationX(int angle);
+  void localRotationY(int angle);
+  void localRotationZ(int angle);
+
+signals:
+  void updateJointNameSignal(const QStringList);
 };
 
 #endif // VIEW_H

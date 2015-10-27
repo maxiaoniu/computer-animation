@@ -57,7 +57,6 @@ SOURCES       = ../skin/main.cpp \
 		../skin/skelonton.cpp \
 		../skin/camera.cpp \
 		../skin/trackball.cpp \
-		../skin/skin.cpp \
 		../skin/skinparser.cpp qrc_shader.cpp \
 		moc_mainwindow.cpp \
 		moc_view.cpp \
@@ -71,7 +70,6 @@ OBJECTS       = main.o \
 		skelonton.o \
 		camera.o \
 		trackball.o \
-		skin.o \
 		skinparser.o \
 		qrc_shader.o \
 		moc_mainwindow.o \
@@ -226,7 +224,6 @@ DIST          = ../skin/skin.pro.user \
 		../skin/camera.h \
 		../skin/filereader.h \
 		../skin/trackball.h \
-		../skin/skin.h \
 		../skin/skinparser.h ../skin/main.cpp \
 		../skin/mainwindow.cpp \
 		../skin/view.cpp \
@@ -236,7 +233,6 @@ DIST          = ../skin/skin.pro.user \
 		../skin/skelonton.cpp \
 		../skin/camera.cpp \
 		../skin/trackball.cpp \
-		../skin/skin.cpp \
 		../skin/skinparser.cpp
 QMAKE_TARGET  = skin
 DESTDIR       = #avoid trailing-slash linebreak
@@ -596,8 +592,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../skin/shader.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../skin/mainwindow.h ../skin/view.h ../skin/balljoint.h ../skin/skelontonparser.h ../skin/vertex.h ../skin/skelonton.h ../skin/camera.h ../skin/filereader.h ../skin/trackball.h ../skin/skin.h ../skin/skinparser.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../skin/main.cpp ../skin/mainwindow.cpp ../skin/view.cpp ../skin/filereader.cpp ../skin/balljoint.cpp ../skin/skelontonparser.cpp ../skin/skelonton.cpp ../skin/camera.cpp ../skin/trackball.cpp ../skin/skin.cpp ../skin/skinparser.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../skin/mainwindow.h ../skin/view.h ../skin/balljoint.h ../skin/skelontonparser.h ../skin/vertex.h ../skin/skelonton.h ../skin/camera.h ../skin/filereader.h ../skin/trackball.h ../skin/skinparser.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../skin/main.cpp ../skin/mainwindow.cpp ../skin/view.cpp ../skin/filereader.cpp ../skin/balljoint.cpp ../skin/skelontonparser.cpp ../skin/skelonton.cpp ../skin/camera.cpp ../skin/trackball.cpp ../skin/skinparser.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../skin/mainwindow.ui $(DISTDIR)/
 
 
@@ -847,7 +843,10 @@ view.o: ../skin/view.cpp ../skin/view.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QTextStream \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qtextstream.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QStack \
-		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qstack.h
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qstack.h \
+		../skin/skinparser.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QVector \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qvector.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o view.o ../skin/view.cpp
 
 filereader.o: ../skin/filereader.cpp ../skin/filereader.h \
@@ -945,21 +944,17 @@ trackball.o: ../skin/trackball.cpp ../skin/trackball.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qpoint.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o trackball.o ../skin/trackball.cpp
 
-skin.o: ../skin/skin.cpp ../skin/skin.h \
-		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/QVector3D \
-		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/qvector3d.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o skin.o ../skin/skin.cpp
-
 skinparser.o: ../skin/skinparser.cpp ../skin/skinparser.h \
-		../skin/skin.h \
-		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/QVector3D \
-		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/qvector3d.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QMap \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qmap.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QTextStream \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qtextstream.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QFile \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qfile.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/QVector3D \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtGui.framework/Headers/qvector3d.h \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QVector \
+		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qvector.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/qdebug.h \
 		/Users/mayue/Qt5-5/5.5/clang_64/lib/QtCore.framework/Headers/QString \

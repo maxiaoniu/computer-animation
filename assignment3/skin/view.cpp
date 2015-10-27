@@ -64,9 +64,10 @@ view::view(QWidget *parent) : QOpenGLWidget(parent)
     this->setFocusPolicy(Qt::StrongFocus);
 
     m_projection.setToIdentity();
-    m_projection.perspective(45.0f, 1, 0.0f, 1000.0f);
+    m_projection.perspective(60.0f, 1, 1.0f, 1000.0f);
     m_camera.setToIdentity();
-    m_camera.setTranslation(0,0,-5);
+    m_camera.setTranslation(0,0,-5.0);
+    currentJointID = 0;
     update();
 }
 view::~view() {
@@ -80,10 +81,11 @@ void view::initializeGL()
   connect(context(), SIGNAL(aboutToBeDestroyed()), this, SLOT(teardownGL()), Qt::DirectConnection);
   //connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
 
-  //glEnable(GL_CULL_FACE);
-  glPolygonOffset(2.0f, 2.0f);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glEnable(GL_CULL_FACE);
+  //glPolygonOffset(2.0f, 2.0f);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  glEnable(GL_DEPTH_TEST);
   //glPolygonOffset( -0.1f, 0.2f );
   {
     // Create Shader (Do not release until VAO is created)
@@ -97,6 +99,8 @@ void view::initializeGL()
     u_modelToWorld = m_program->uniformLocation("modelToWorld");
     u_worldToCamera = m_program->uniformLocation("worldToCamera");
     u_cameraToView = m_program->uniformLocation("cameraToView");
+    u_jointMatrixs = m_program->uniformLocation("boneMatrices");
+    //u_jointBindMatrix = m_program->uniformLocation("bindingMatrices");
 
     // Create Buffer (Do not release until VAO is created)
     m_vertex.create();
@@ -122,19 +126,24 @@ void view::initializeGL()
 void view::resizeGL(int width, int height)
 {
     m_projection.setToIdentity();
-    m_projection.perspective(45.0f, width / float(height), 0.0f, 1000.0f);
+    m_projection.perspective(60.0f, width / float(height), 1.0f, 1000.0f);
 }
 
 void view::paintGL()
 {
+  QMatrix4x4 jointMatrixes[32];
+  QMatrix4x4 jointBindingMatrixes[32];
   // Clear
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Render using our shader
   m_program->bind();
 
   m_program->setUniformValue(u_worldToCamera,m_camera.getMatrix());
   m_program->setUniformValue(u_cameraToView, m_projection);
+  m_transform.setToIdentity();
+
+  m_program->setUniformValue(u_modelToWorld, m_transform);
   //qDebug()<<m_camera.getMatrix();
   if(skel)
   {
@@ -149,32 +158,42 @@ void view::paintGL()
             currJoint->localPos.rotate(rotateY,0,1,0);
             currJoint->localPos.rotate(rotateZ,0,0,1);
         }
+        if(currJoint->id == currentJointID) {
+            currJoint->localPos.rotate(jointRotateX,1,0,0);
+            currJoint->localPos.rotate(jointRotateY,0,1,0);
+            currJoint->localPos.rotate(jointRotateZ,0,0,1);
+        }
         ++it;
     }
     it = skel->tree.begin();
     while(it != skel->tree.constEnd()) {
         BallJoint* currJoint = it.key();
         QMatrix4x4 boneModel = currJoint->localPos;
-        QVector3D scaleFactor = currJoint->getScaleFactor();
-        QVector3D translateFactor = currJoint->getTranslation();
-        boneModel.translate(translateFactor);
-        boneModel.scale(scaleFactor);
 
-         //qDebug()<<boneModel;
-         //boneModel.rotate(m_trackball.rotation());
-        //qDebug()<<boneModel;
+
         while(skel->tree[currJoint] != NULL) {
             currJoint = skel->tree[currJoint];
             boneModel = (currJoint->localPos)*boneModel;
         }
-        m_program->setUniformValue(u_modelToWorld, boneModel);
-        //glEnable(GL_POLYGON_OFFSET_FILL);
-        //glPolygonOffset(2.0f, 2.0f);
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(sg_vertexes) / sizeof(sg_vertexes[0]));
+        //m_program->setUniformValue(u_modelToWorld,boneModel);
+        //it.key()->localPos = boneModel;
+        int id = it.key()->id;
+        //qDebug()<<"current id"<<id;
+        //qDebug()<<"current name"<<it.key()->name;
+        //qDebug()<<"current joint matrix"<<boneModel;
+        //qDebug()<<"current binding matrix"<<skinparser1->bindingsMatrix[id]->transposed();
+        jointMatrixes[id] = boneModel;
+        jointBindingMatrixes[id] = skinparser1->bindingsMatrix[id]->transposed();
+        //qDebug()<<"C*B"<<boneModel*(skinparser1->bindingsMatrix[id]->transposed()).inverted();
+        //glDrawArrays(GL_TRIANGLES, 0, sizeof(sg_vertexes) / sizeof(sg_vertexes[0]));
         //glDisable(GL_POLYGON_OFFSET_FILL);
         ++it;
     }
-
+    m_program->setUniformValueArray("boneMatrices",jointMatrixes,32);
+    m_program->setUniformValueArray("bindingMatrices", jointBindingMatrixes,32);
+    m_program->setUniformValue("matrixNormal", (m_camera.getMatrix()*m_transform).inverted().transposed());
+    if(skinparser1)
+        skinparser1->draw();
     m_object.release();
   }
   m_program->release();
@@ -198,12 +217,16 @@ QPointF view::PosToViewPos(const QPoint& p)
 
 void view::recFile(const QString &name)
 {
-    qDebug()<<"receive file";
+    qDebug()<<"receive file"<<name;
+    QString skinfileName = QString(name);
+    skinfileName.replace(name.size()-4,4,"skin");
+    qDebug()<<"receive file"<<skinfileName;
+    QFile *skinFile = new QFile(skinfileName);
+    if(skinparser1)
+        delete skinparser1;
+    skinparser1 = new SkinParser(skinFile);
     QFile mfile(name);
     SkelontonParser parser(&mfile);
-
-    QFile *skinFile = new QFile(QString("/Users/mayue/test.skin"));
-    SkinParser skinparser(skinFile);
 
     //danger action,TODO fix
     if(skel)
@@ -214,6 +237,8 @@ void view::recFile(const QString &name)
     rotateY = 0;
     rotateZ = 0;
     m_trackball.init();
+
+    emit updateJointNameSignal(parser.nameList);
 }
 
 void view::worldRotationX(int angle)
@@ -230,6 +255,26 @@ void view::worldRotationY(int angle)
 void view::worldRotationZ(int angle)
 {
     rotateZ = angle;
+}
+
+void view::jointSelect(int index)
+{
+    currentJointID = index;
+}
+
+void view::localRotationX(int angle)
+{
+    jointRotateX = angle;
+}
+
+void view::localRotationY(int angle)
+{
+    jointRotateY = angle;
+}
+
+void view::localRotationZ(int angle)
+{
+    jointRotateZ = angle;
 }
 
 void view::mousePressEvent(QMouseEvent *event)

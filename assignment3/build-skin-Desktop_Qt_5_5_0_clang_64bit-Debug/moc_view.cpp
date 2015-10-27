@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_view_t {
-    QByteArrayData data[9];
-    char stringdata0[81];
+    QByteArrayData data[15];
+    char stringdata0[166];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,19 +30,27 @@ struct qt_meta_stringdata_view_t {
 static const qt_meta_stringdata_view_t qt_meta_stringdata_view = {
     {
 QT_MOC_LITERAL(0, 0, 4), // "view"
-QT_MOC_LITERAL(1, 5, 10), // "teardownGL"
-QT_MOC_LITERAL(2, 16, 0), // ""
-QT_MOC_LITERAL(3, 17, 7), // "recFile"
-QT_MOC_LITERAL(4, 25, 4), // "name"
-QT_MOC_LITERAL(5, 30, 14), // "worldRotationX"
-QT_MOC_LITERAL(6, 45, 5), // "angle"
-QT_MOC_LITERAL(7, 51, 14), // "worldRotationY"
-QT_MOC_LITERAL(8, 66, 14) // "worldRotationZ"
+QT_MOC_LITERAL(1, 5, 21), // "updateJointNameSignal"
+QT_MOC_LITERAL(2, 27, 0), // ""
+QT_MOC_LITERAL(3, 28, 10), // "teardownGL"
+QT_MOC_LITERAL(4, 39, 7), // "recFile"
+QT_MOC_LITERAL(5, 47, 4), // "name"
+QT_MOC_LITERAL(6, 52, 14), // "worldRotationX"
+QT_MOC_LITERAL(7, 67, 5), // "angle"
+QT_MOC_LITERAL(8, 73, 14), // "worldRotationY"
+QT_MOC_LITERAL(9, 88, 14), // "worldRotationZ"
+QT_MOC_LITERAL(10, 103, 11), // "jointSelect"
+QT_MOC_LITERAL(11, 115, 5), // "index"
+QT_MOC_LITERAL(12, 121, 14), // "localRotationX"
+QT_MOC_LITERAL(13, 136, 14), // "localRotationY"
+QT_MOC_LITERAL(14, 151, 14) // "localRotationZ"
 
     },
-    "view\0teardownGL\0\0recFile\0name\0"
-    "worldRotationX\0angle\0worldRotationY\0"
-    "worldRotationZ"
+    "view\0updateJointNameSignal\0\0teardownGL\0"
+    "recFile\0name\0worldRotationX\0angle\0"
+    "worldRotationY\0worldRotationZ\0jointSelect\0"
+    "index\0localRotationX\0localRotationY\0"
+    "localRotationZ"
 };
 #undef QT_MOC_LITERAL
 
@@ -52,26 +60,40 @@ static const uint qt_meta_data_view[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   64,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   39,    2, 0x09 /* Protected */,
-       3,    1,   40,    2, 0x0a /* Public */,
-       5,    1,   43,    2, 0x0a /* Public */,
-       7,    1,   46,    2, 0x0a /* Public */,
-       8,    1,   49,    2, 0x0a /* Public */,
+       3,    0,   67,    2, 0x09 /* Protected */,
+       4,    1,   68,    2, 0x0a /* Public */,
+       6,    1,   71,    2, 0x0a /* Public */,
+       8,    1,   74,    2, 0x0a /* Public */,
+       9,    1,   77,    2, 0x0a /* Public */,
+      10,    1,   80,    2, 0x0a /* Public */,
+      12,    1,   83,    2, 0x0a /* Public */,
+      13,    1,   86,    2, 0x0a /* Public */,
+      14,    1,   89,    2, 0x0a /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QStringList,    2,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,    4,
-    QMetaType::Void, QMetaType::Int,    6,
-    QMetaType::Void, QMetaType::Int,    6,
-    QMetaType::Void, QMetaType::Int,    6,
+    QMetaType::Void, QMetaType::QString,    5,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,   11,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::Int,    7,
 
        0        // eod
 };
@@ -82,12 +104,26 @@ void view::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
         view *_t = static_cast<view *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->teardownGL(); break;
-        case 1: _t->recFile((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 2: _t->worldRotationX((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 3: _t->worldRotationY((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->worldRotationZ((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->updateJointNameSignal((*reinterpret_cast< const QStringList(*)>(_a[1]))); break;
+        case 1: _t->teardownGL(); break;
+        case 2: _t->recFile((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 3: _t->worldRotationX((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 4: _t->worldRotationY((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->worldRotationZ((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->jointSelect((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->localRotationX((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->localRotationY((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 9: _t->localRotationZ((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (view::*_t)(const QStringList );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&view::updateJointNameSignal)) {
+                *result = 0;
+            }
         }
     }
 }
@@ -119,14 +155,21 @@ int view::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 10;
     }
     return _id;
+}
+
+// SIGNAL 0
+void view::updateJointNameSignal(const QStringList _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE

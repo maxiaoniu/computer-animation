@@ -13,6 +13,7 @@ public:
     BallJoint();
     ~BallJoint();
     QString name;
+    int id;
     QVector3D offset;
     QVector3D boxmin;
     QVector3D boxmax;

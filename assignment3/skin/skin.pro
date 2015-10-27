@@ -21,7 +21,6 @@ SOURCES += main.cpp\
     skelonton.cpp \
     camera.cpp \
     trackball.cpp \
-    skin.cpp \
     skinparser.cpp
 
 HEADERS  += mainwindow.h \
@@ -33,7 +32,6 @@ HEADERS  += mainwindow.h \
     camera.h \
     filereader.h \
     trackball.h \
-    skin.h \
     skinparser.h
 
 RESOURCES += \
